@@ -4,7 +4,10 @@ on:
   push: 
     branches: 
       - main
-
+  workflow_dispatch: 
+    branches: 
+      - main
+      
 env: 
   DOCKERHUB_UNAME: ${{ secrets.DOCKERHUB_UNAME }}
   DOCKERHUB_PW: ${{ secrets.DOCKERHUB_PW }}
