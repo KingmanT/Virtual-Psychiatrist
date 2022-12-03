@@ -1,0 +1,29 @@
+name: Build
+
+on: 
+  push: 
+    branches: 
+      - main
+
+env: 
+  DOCKERHUB_UNAME: ${{ secrets.DOCKERHUB_UNAME }}
+  DOCKERHUB_PW: ${{ secrets.DOCKERHUB_PW }}
+
+jobs: 
+  Build-Backend-Image: 
+    name: Build-Backend-Image
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: .
+    steps: 
+    - uses: actions/checkout@v3
+      name: GitHub Checkout
+    - name: Install Docker
+      run: curl -s -O https://raw.githubusercontent.com/RichardDeodutt/Deployment-5/main/Runners/runinstalldocker.sh && sudo chmod +x runinstalldocker.sh && sudo ./runinstalldocker.sh
+    - name: Create Docker Image
+      run: |
+          docker login --username $DOCKERHUB_UNAME --password $DOCKERHUB_PW
+          docker build -t $DOCKERHUB_UNAME/vpbackend:latest ./Backend
+          docker push $DOCKERHUB_UNAME/vpbackend:latest
